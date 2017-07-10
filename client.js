@@ -3,46 +3,25 @@ var socket = io();
 new Vue({
     el: '#app',
     data: {
-        temp:'',
-        liveUsers: [],
-        nickName: "",
-        nickNames: [],
+        user:{},
+        liveUsers: {},
+        nickName: '',
         messages: [],
         areTyping : [],
-        message: {
-            "type": "",
-            "action": "",
-            "user" : "",
-            "text" : "",
-            "timestamp" : ""
-        }
+        message: {type: '', action: '', user : '', text : '', timestamp : ''}
     },
     created: function(){
         //server emits 'a user joined message'
-        //update the liveUsers array
-        socket.on('user joined', (socket_id)=>{
-            //get list of active users
-            axios.get('/online')
-            .then( (resp) => {
-                for(var key in resp.data) {
-                    //don't add online live user's list if its already there
-                    if(this.liveUsers.indexOf(key) <= -1){
-                         this.temp = {username: key, id: key};
-                        this.liveUsers.push(this.temp);
-                        //this.nickNames[key] = key
-                    }
-                }
-                console.log(this.liveUsers);
-            });
-
+        socket.on('user joined', (data)=>{
+            if(this.user.username == undefined){
+               this.user = data.newUser; 
+            }
+            this.liveUsers = data.users;
         });
 
         //when someone leaves the chat room
-        socket.on('user left', (socket_id) => {
-            var user_index = this.liveUsers.indexOf(socket_id);
-            if(user_index>-1){
-                this.liveUsers.splice(user_index,1);
-            }
+        socket.on('user left', (users) => {
+            this.liveUsers = users;
         });
 
         //catch a broadcasted message and update messages array
@@ -50,24 +29,24 @@ new Vue({
             this.messages.push(chatMessage);
         });
 
+        socket.on('nickname changed', (users) => {
+            this.liveUsers = users;
+        });
     },
     
     methods: {
         send : function() {
             this.message.type = "chat";
-            this.message.user = socket.id;
+            this.message.user = this.user.username;
             this.message.timestamp = "few moment ago";
             socket.emit('chat.message', this.message);
-            //now clear the field
-            this.message.type = "";
-            this.message.user = "";
-            this.message.timestamp = "";
-            this.message.text = "";
-
+            this.message = {type: '', user: '',timestamp: '',text: ''};
         },
 
         setName : function(){
-             this.temp.username = this.nickName;
+            this.user.username = this.nickName;
+            this.liveUsers[this.user.id].username = this.user.username;
+            socket.emit('nickname changed', this.user);
         },
 
         userIsTyping : function(username) {
