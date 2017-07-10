@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BakBak</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css" />
+    
+</head>
+
+<body>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog" backdrop="false">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Welcome to BakBak</h4>
+        </div>
+        <div class="modal-body">
+          <p>Type your name here</p>
+          <form @submit.prevent="setName">
+                <input v-model="nickName" type="text" class="form-control input-lg" placeholder="Your Nick Name" name="uname"/>
+                <!--<button type="submit">Save</button>-->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+    <div id="app">
+
+        <div class="col-md-2 userlist">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-user"></span> Online ({{ liveUsers.length }})
+            </div>
+            <ul class="chat">
+                <li v-for="user in liveUsers">
+                    {{ user.username }}&nbsp;
+                </li>
+
+
+            </ul>
+        </div>
+
+        <div class="col-md-8">
+            <div id="livechat-container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-comment"></span>&nbsp;Lets BakBak
+                    </div>
+                    <div class="panel-body">
+                        <ul class="chat" id="messages">
+                            <li v-for="message in messages" class="left clearfix">
+                                <div v-if="message.type == 'info'" class="info">
+                                    {{ message.msg }}
+                                </div>
+                                <div v-if="message.type == 'chat'">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ message.user }}</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>&nbsp;{{ message.timestamp }}</small>
+                                        </div>
+                                        <p>
+                                            {{ message.text }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="panel-footer">
+                        <form @submit.prevent="send">
+                            <input v-model="message.text" type="text" class="form-control input-lg" placeholder="Type chat here" />
+                        </form>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <br><br><br><br><br>
+            <form @submit.prevent="setName">
+                <input v-model="nickName" type="text" class="form-control input-lg" placeholder="Your Nick Name" name="uname"/>
+            </form>
+        </div>
+        <!--{{liveUsers}}-->
+    </div>
+    </div>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      
+    <script>$("#myModal").modal({backdrop:'static', keyboard:false})</script>
+    <script src="client.js"></script>
+</body>
+
+</html>
