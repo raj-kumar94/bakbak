@@ -6,31 +6,10 @@
     <title>BakBak</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="main.css" />
-    <style type="text/css">
-        [v-cloak] .v-cloak--block {
-          display: block;
-        }
-        [v-cloak] .v-cloak--inline {
-          display: inline;
-        }
-        [v-cloak] .v-cloak--inlineBlock {
-          display: inline-block;
-        }
-        [v-cloak] .v-cloak--hidden {
-          display: none;
-        }
-        [v-cloak] .v-cloak--invisible {
-          visibility: hidden;
-        }
-        .v-cloak--block,
-        .v-cloak--inline,
-        .v-cloak--inlineBlock {
-          display: none;
-        }
-    </style>
+    
 </head>
 
-<body v-cloak>
+<body>
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog" backdrop="false">
     <div class="modal-dialog">
@@ -72,20 +51,17 @@
             </ul>
         </div>
 
-        <div class="col-md-8" v-cloak>
+        <div class="col-md-8">
             <div id="livechat-container">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <span class="glyphicon glyphicon-comment"></span>&nbsp;Lets BakBak
                     </div>
-                    <div class="panel-body" v-cloak>
+                    <div class="panel-body">
                         <ul class="chat" id="messages">
                             <li v-for="message in messages" class="left clearfix">
-                                <div v-if="message.type == 'left'" class="info">
-                                    <strong class="text-info">{{ message.user.username }}</strong> has left the room.
-                                </div>
-                                <div v-if="message.type == 'joined'" class="info">
-                                    <strong class="text-success">{{ message.user.username }}</strong> has joined the room.
+                                <div v-if="message.type == 'info'" class="info">
+                                    {{ message.msg }}
                                 </div>
                                 <div v-if="message.type == 'chat'">
                                     <span class="chat-img pull-left">
@@ -127,13 +103,14 @@
     </div>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+      
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       
     <!-- <script>$("#myModal").modal({backdrop:'static', keyboard:false})</script> -->
