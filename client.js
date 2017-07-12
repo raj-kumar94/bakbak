@@ -1,4 +1,5 @@
 var socket = io();
+
 new Vue({
     el: '#app',
     data: {
@@ -7,8 +8,8 @@ new Vue({
         liveUsers: {},
         nickName: '',
         messages: [],
-        areTyping: [],
-        message: { type: '', action: '', user: '', text: '', timestamp: '', msg: '' }
+        areTyping : [],
+        message: {type: '', action: '', user : '', text : '', timestamp : ''}
     },
     created: function() {
         /*socket.on('connect', () => {
@@ -30,8 +31,7 @@ new Vue({
 
         //when someone leaves the chat room
         socket.on('user left', (users) => {
-            this.liveUsers = users.users;
-            this.messages.push({ type: 'left', action: '', user: users.leftUser, timestamp: '' });
+            this.liveUsers = users;
         });
 
         //catch a broadcasted message and update messages array
@@ -43,29 +43,29 @@ new Vue({
             this.liveUsers = users;
         });
     },
-
+    
     methods: {
-        send: function() {
+        send : function() {
             this.message.type = "chat";
             this.message.user = this.user.username;
-            this.message.timestamp = "few moment ago";
+            this.message.timestamp = moment().calendar();
             socket.emit('chat.message', this.message);
-            this.message = { type: '', user: '', timestamp: '', text: '' };
+            this.message = {type: '', user: '',timestamp: '',text: ''};
         },
 
-        setName: function() {
+        setName : function(){
             this.user.username = this.nickName;
-            this.liveUsers[this.user.id].username = this.nickName;
+            this.liveUsers[this.user.id].username = this.user.username;
             socket.emit('nickname changed', this.user);
         },
 
-        userIsTyping: function(username) {
+        userIsTyping : function(username) {
 
         },
-        usersAreTyping: function() {
+        usersAreTyping : function() {
 
         },
-        stoppedTyping: function() {
+        stoppedTyping : function() {
 
         }
     }
