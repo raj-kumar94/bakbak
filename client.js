@@ -18,8 +18,9 @@ new Vue({
         });*/
         //server emits 'a user joined message'
         socket.on('user joined', (data) => {
-            socket.emit('room', this.room);
             if (this.user.username == undefined) {
+                this.room = 'room'+Math.floor(Math.random() * 2) + 1;
+                socket.emit('room', {room: this.room, user:data.newUser});
                 this.user.username = data.newUser.username;
                 this.user.id = data.newUser.id;
                 this.user = data.newUser;
@@ -28,7 +29,10 @@ new Vue({
             }
             this.liveUsers = data.users;
         });
-
+        socket.on('room joined', (users) => {
+            // console.log(data);
+            this.liveUsers = users;
+        });
         // socket.on('user joined room', (data) => {
         //     this.messages.push({ type: 'info', action: '', user: data.newUser, timestamp: '' });
         // });
@@ -56,7 +60,7 @@ new Vue({
             this.message.type = "chat";
             this.message.user = this.user.username;
             this.message.timestamp = moment().calendar();
-            socket.emit('chat.message', this.message);
+            socket.emit('chat.message', {message: this.message, room: this.room});
             this.message = {type: '', user: '',timestamp: '',text: ''};
         },
 

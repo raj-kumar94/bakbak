@@ -27,26 +27,31 @@ app.get('/online', function(req, res) {
 
 //socket connection
 io.on('connection', function(socket) {
-    var userRoom = 'myRoom';
+    var userRoom = 'chatbox';
     var newUser = { username: socket.id, id: socket.id, room:userRoom };
     users[socket.id] = newUser;
     io.emit('user joined', { newUser: newUser, users: users });
-    socket.on('room', function(userRoom) {
-        socket.join(userRoom);
+    socket.on('room', function(userData) {
+        var uRoom = userData.room;
+        socket.room = uRoom;
+        socket.join(uRoom);
+        userData.user.room = uRoom;
+        users[userData.user.id].room = uRoom;
+        socket.emit('room joined', users);
        // io.sockets.in(userRoom).emit('user joined room', { newUser: newUser, users: users });
     });
 
     //receiving client's message
-    socket.on('chat.message', function(message) {
+    socket.on('chat.message', function(messageData) {
         //since a client sends message to server, server needs to broadcast this message
         // io.emit('chat.message', message);
-        io.sockets.in(userRoom).emit('chat.message', message);
+        io.sockets.in(messageData.room).emit('chat.message', messageData.message);
     });
     //receiving client's message
     socket.on('nickname changed', function(changedUser) {
         //since a client sends message to server, server needs to broadcast this message
         users[changedUser.id].username = changedUser.username;
-        socket.in(userRoom).broadcast.emit('nickname changed', users);
+        socket.in(changedUser.room).broadcast.emit('nickname changed', users);
     });
 
     socket.on('disconnect', function() {
