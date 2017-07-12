@@ -43,7 +43,8 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         console.log('user left ' + socket.id);
+        var leftUser = users[socket.id];
         delete users[socket.id];
-        socket.broadcast.emit('user left', users);
+        socket.broadcast.emit('user left', {leftUser: leftUser, users: users});
     });
 });

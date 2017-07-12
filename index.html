@@ -6,10 +6,31 @@
     <title>BakBak</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="main.css" />
-    
+    <style type="text/css">
+        [v-cloak] .v-cloak--block {
+          display: block;
+        }
+        [v-cloak] .v-cloak--inline {
+          display: inline;
+        }
+        [v-cloak] .v-cloak--inlineBlock {
+          display: inline-block;
+        }
+        [v-cloak] .v-cloak--hidden {
+          display: none;
+        }
+        [v-cloak] .v-cloak--invisible {
+          visibility: hidden;
+        }
+        .v-cloak--block,
+        .v-cloak--inline,
+        .v-cloak--inlineBlock {
+          display: none;
+        }
+    </style>
 </head>
 
-<body>
+<body v-cloak>
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog" backdrop="false">
     <div class="modal-dialog">
@@ -51,17 +72,20 @@
             </ul>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-8" v-cloak>
             <div id="livechat-container">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <span class="glyphicon glyphicon-comment"></span>&nbsp;Lets BakBak
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" v-cloak>
                         <ul class="chat" id="messages">
                             <li v-for="message in messages" class="left clearfix">
-                                <div v-if="message.type == 'info'" class="info">
-                                    {{ message.msg }}
+                                <div v-if="message.type == 'left'" class="info">
+                                    <strong class="text-info">{{ message.user.username }}</strong> has left the room.
+                                </div>
+                                <div v-if="message.type == 'joined'" class="info">
+                                    <strong class="text-success">{{ message.user.username }}</strong> has joined the room.
                                 </div>
                                 <div v-if="message.type == 'chat'">
                                     <span class="chat-img pull-left">
