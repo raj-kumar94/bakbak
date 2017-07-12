@@ -3,6 +3,8 @@ var socket = io();
 new Vue({
     el: '#app',
     data: {
+        hide: false,
+        hide1: true,
         room: 'myRoom',
         user: {},
         liveUsers: {},
@@ -43,6 +45,7 @@ new Vue({
             this.liveUsers = data.users;
             this.messages.push({ type: 'info', action: '',text:'left the room' ,user: data.deletedUser, timestamp: moment().calendar() });
             console.log(this.messages);
+            console.log(this.messages);
         });
 
         //catch a broadcasted message and update messages array
@@ -79,6 +82,11 @@ new Vue({
         },
         stoppedTyping : function() {
 
+        },
+        changeClass : function() {
+            this.hide = true;
+            this.hide1 = false;
+            this.setName();
         }
     }
 });

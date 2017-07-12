@@ -58,6 +58,7 @@ io.on('connection', function(socket) {
         console.log('user left ' + socket.id);
         var deletedUser = users[socket.id];
         delete users[socket.id];
-        socket.in(userRoom).broadcast.emit('user left', {users:users, deletedUser:deletedUser});
+        socket.in(deletedUser.room).broadcast.emit('user left', {users:users, deletedUser:deletedUser});
+        console.log(deletedUser.room);
     });
 });
