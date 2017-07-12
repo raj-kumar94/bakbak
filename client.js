@@ -2,6 +2,7 @@ var socket = io();
 new Vue({
     el: '#app',
     data: {
+        room: 'myRoom',
         user: {},
         liveUsers: {},
         nickName: '',
@@ -10,8 +11,13 @@ new Vue({
         message: { type: '', action: '', user: '', text: '', timestamp: '', msg: '' }
     },
     created: function() {
+        /*socket.on('connect', () => {
+            Connected, let's sign-up for to receive messages for this room
+            socket.emit('room', this.room);
+        });*/
         //server emits 'a user joined message'
         socket.on('user joined', (data) => {
+            socket.emit('room', this.room);
             if (this.user.username == undefined) {
                 this.user.username = data.newUser.username;
                 this.user.id = data.newUser.id;
