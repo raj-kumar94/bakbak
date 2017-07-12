@@ -24,14 +24,21 @@ new Vue({
                 this.user.id = data.newUser.id;
                 this.user = data.newUser;
             } else {
-                this.messages.push({ type: 'joined', action: '', user: data.newUser, timestamp: '' });
+                this.messages.push({ type: 'info', action: '',text:'joined the room' ,user: data.newUser, timestamp: moment().calendar() });
             }
             this.liveUsers = data.users;
         });
 
+        // socket.on('user joined room', (data) => {
+        //     this.messages.push({ type: 'info', action: '', user: data.newUser, timestamp: '' });
+        // });
+
         //when someone leaves the chat room
-        socket.on('user left', (users) => {
-            this.liveUsers = users;
+        socket.on('user left', (data) => {
+            // console.log(data);
+            this.liveUsers = data.users;
+            this.messages.push({ type: 'info', action: '',text:'left the room' ,user: data.deletedUser, timestamp: moment().calendar() });
+            console.log(this.messages);
         });
 
         //catch a broadcasted message and update messages array
@@ -57,6 +64,7 @@ new Vue({
             this.user.username = this.nickName;
             this.liveUsers[this.user.id].username = this.user.username;
             socket.emit('nickname changed', this.user);
+            this.nickName='';
         },
 
         userIsTyping : function(username) {

@@ -32,8 +32,8 @@ io.on('connection', function(socket) {
     users[socket.id] = newUser;
     io.emit('user joined', { newUser: newUser, users: users });
     socket.on('room', function(userRoom) {
-        
         socket.join(userRoom);
+       // io.sockets.in(userRoom).emit('user joined room', { newUser: newUser, users: users });
     });
 
     //receiving client's message
@@ -51,7 +51,8 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         console.log('user left ' + socket.id);
+        var deletedUser = users[socket.id];
         delete users[socket.id];
-        socket.in(userRoom).broadcast.emit('user left', users);
+        socket.in(userRoom).broadcast.emit('user left', {users:users, deletedUser:deletedUser});
     });
 });

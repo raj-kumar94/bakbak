@@ -61,7 +61,10 @@
                         <ul class="chat" id="messages">
                             <li v-for="message in messages" class="left clearfix">
                                 <div v-if="message.type == 'info'" class="info">
-                                    {{ message.msg }}
+                                   <strong>{{message.user.username }}</strong><i> {{ message.text }}</i>
+                                   <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>&nbsp;{{ message.timestamp }}
+                                    </small>
                                 </div>
                                 <div v-if="message.type == 'chat'">
                                     <span class="chat-img pull-left">
