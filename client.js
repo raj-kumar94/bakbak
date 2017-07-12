@@ -14,10 +14,6 @@ new Vue({
         message: {type: '', action: '', user : '', text : '', timestamp : ''}
     },
     created: function() {
-        /*socket.on('connect', () => {
-            Connected, let's sign-up for to receive messages for this room
-            socket.emit('room', this.room);
-        });*/
         //server emits 'a user joined message'
         socket.on('user joined', (data) => {
             if (this.user.username == undefined) {
